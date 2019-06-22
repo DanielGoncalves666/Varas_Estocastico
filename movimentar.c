@@ -1,8 +1,9 @@
 /*
 Nome do Arquivo: movimentar.c
+Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
 Data de criação: 2019
-Última modificação: 2019
+Última modificação: 22/06/2019
 
 Descrição: arquivo onde estão implementadas as funções de alocação e dos mecanismos de movimentação dos pedestres 
 
@@ -11,6 +12,15 @@ Descrição: arquivo onde estão implementadas as funções de alocação e dos 
 #include<stdio.h>
 #include<stdlib.h>
 #include"prototipos.h"
+
+//uma alternativa seria ir diminuindo a probabilidade gradativamente : 40 20 15 10 5, em vez de ter duas celulas com a msm
+//alem disso pode ser necessario fazer um sorteio na ordem de celulas com valores iguais antes
+
+static int probab5[] = { 40, 20, 20, 10, 10 };
+static int probab4[] = { 45, 22, 22, 11 };
+static int probab3[] = { 50, 25, 25};
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 static void verifica_erro(int a, int b, int ped);//função que verifica se algum pedestre está em uma posição inválida
 static int valid_cell(int a, int b);//função responsavel por contar a qtd de celulas validas para movimentação
@@ -22,6 +32,12 @@ static int function_panic(Pessoas *P);//função para panico entre os pedestres
 static void X_decide(Pessoas *p, Pessoas *p1);//função responsável por decidir qual pedestre irá se mover
 static node *aloca(Pessoas *pes);//função para se alocar elementos da lista de conflitos	
 static void libera(node *LISTA);//função para desalocar a memória dinâmicamente alocada de uma lista
+
+static int estocastico(int tamanho);//retorna para qual célula o pedestre irá se mover se estiver na parte estocastica da sala
+static int estoc_case(int num, int sem);//função que auxilia a estocastico() em determinar para onde o pedestre irá se mover
+static int soma_vet(int vet[], int qtd);//função para somar os valores de um vetor de inteiros 
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 void pedestre_alocar(){//função para alocar os pedestres na sala
 	for(int ped=0; ped<PEDESTRES;){//ped serve para determinar qual pedestre esta sendo alocado no momento
@@ -82,7 +98,12 @@ void basic_moviment(){//função para realizar o movimento basico dos pedestres
 		storage_cell(celulas,a,b);//função responsavel por fazer esse armazenamento
 		organiza_vetor(celulas,valid);//organizar os valores da vizinhamça em ordem crescente
 
-		int chosen = comparation(celulas,valid);//retorna a celula para a qual o pedestre irá se mover
+		int chosen;//variével que indicará para qual das células o pedestre irá se mover
+
+		if(piso.mat[a][b] >= DIST_ELIT)
+			chosen = comparation(celulas,valid);//retorna para qual célula o pedestre irá se mover se estiver na parte determinística da sala
+		else
+			chosen = estocastico(valid);//retorna para qual célula o pedestre irá se mover se estiver na parte estocastica da sala
 
 		Pedestre[ped].linha_mover = (int) celulas[chosen][1];//a variavel que indica a linha para onde o pedestre irá se mover recebe o valor amazenado na segunda coluna da matriz celulas
 		Pedestre[ped].coluna_mover = (int) celulas[chosen][2];//a variavel que indica a coluna para onde o pedestre irá se mover recebe o valor armazenado na terceira coluna da matriz celulas
@@ -92,6 +113,66 @@ void basic_moviment(){//função para realizar o movimento basico dos pedestres
 		free(celulas);//desaloca a memoria do vetor de linhas
 		ped++;
 	}
+}
+
+int estocastico(int tamanho){//retorna para qual célula o pedestre irá se mover se estiver na parte estocastica da sala
+	int sem = rand()%100;//a variável sem recebe o resto da divisão de um numero aleatorio por 100
+	
+	if(tamanho < QTD_ELIT){//se caso tiver menos células válidas que a qtd de células que entrariam na escolha aleatória
+		return estoc_case(tamanho,sem);//função que retorna para qual célula o pedestre irá se mover baseado no modelo estocástico quando a quantidade de células válidas é menor que QTD_ELIT
+	}else{
+		return estoc_case(QTD_ELIT,sem);//função que retorna para qual célula o pedestre irá se mover baseado no modelo estocástico quando a quantidade de células válidas é maior ou igual a QTD_ELIT
+	}
+}
+
+int estoc_case(int num, int sem){//função que auxilia a estocastico() em determinar para onde o pedestre irá se mover
+	//o primeiro parâmetro é a qtd de células disponíveis para o pedestre se mover
+	//o segundo é o numero aleatorio
+	if(num <= 2)//se caso existir apenas uma ou duas células válidas, determina-se que o pedestre irá se mover para a de menor valor.
+		return 0;
+	
+	switch(num){
+		case 3://se caso existir apenas 3 células possíveis
+			if(sem < probab3[0])//caso sem for menor que o primeiro valor do vetor
+				return 0;//retorna que o pedestre irá se mover para a menor célula
+			else if(sem < soma_vet(probab3,2))//caso sem for menor que a soma dos dois primeiros valores do vetor
+				return 1;//retorna que o pedestre irá se mover para a segunda célula
+			else if(sem < soma_vet(probab3,3))//caso sem for menor que a soma dos três primeiros valores do vetor
+				return 2;//retorna que o pedestre irá se mover para a terceira célula
+		
+		case 4://se caso exisitir apenas 4 células possíveis
+			if(sem < probab4[0])//caso sem for menor que o primeiro valor do vetor
+				return 0;//retorna que o pedestre irá se mover para a menor célula
+			else if(sem < soma_vet(probab4,2))//caso sem for menor que a soma dos dois primeiros valores do vetor
+				return 1;//retorna que o pedestre irá se mover para a segunda célula
+			else if(sem < soma_vet(probab4,3))//caso sem for menor que a soma dos três primeiros valores do vetor
+				return 2;//retorna que o pedestre irá se mover para a terceira célula
+			else if(sem < soma_vet(probab4,4))//caso sem for menor que a soma dos quatro primeiros valores do vetor
+				return 3;//retorna que o pedestre irá se mover para a quarta célula
+		
+		case 5://se caso existir apenas 5 células possiveis
+			if(sem < probab5[0])//caso sem for menor que o primeiro valor do vetor
+				return 0;//retorna que o pedestre irá se mover para a menor célula
+			else if(sem < soma_vet(probab5,2))//caso sem for menor que a soma dos dois primeiros valores do vetor
+				return 1;//retorna que o pedestre irá se mover para a segunda célula
+			else if(sem < soma_vet(probab5,3))//caso sem for menor que a soma dos três primeiros valores do vetor
+				return 2;//retorna que o pedestre irá se mover para a terceira célula
+			else if(sem < soma_vet(probab5,4))//caso sem for menor que a soma dos quatro primeiros valores do vetor
+				return 3;//retorna que o pedestre irá se mover para a quarta célula
+			else if(sem < soma_vet(probab5,5))//caso sem for menor que a soma dos cinco primeiros valores do vetor
+				return 4;//retorna que o pedestre irá se mover para a quinta célula
+	}
+	return 0;
+}
+
+int soma_vet(int vet[], int qtd){//função para somar os valores de um vetor de inteiros 
+	//o primeiro parâmetro recebe um vetor de tamanho desconhecido
+	//o segundo recebe a quantidade de posições, da esquerda para a direita, que devem ser somadas
+	int soma = 0;//variavel para a soma
+	for(int a=0; a<qtd; a++){//percorre as posições determinadas
+		soma += vet[a];//realiza a soma
+	}
+	return soma;//retorna a soma
 }
 
 

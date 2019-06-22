@@ -1,5 +1,6 @@
 Nesta pasta estão contidos todos os arquivos para a execução do modelo básico de Varas.
 	Alteração: impedimento da movimentação.
+		   adição da movimentação estocástica
 	
 Os arquivos nesta pasta são:
 	main.c --> contém a main

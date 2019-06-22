@@ -1,5 +1,6 @@
 /*
 Nome do Arquivo: main.c
+Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
 Data de Criação: 2018
 Última Modificação: 22/06/2019

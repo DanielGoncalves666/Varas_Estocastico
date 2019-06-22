@@ -1,5 +1,6 @@
 /*
 Nome do Arquivo: prototipos.h
+Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
 Data de Criação: 2019
 Última Modificação: 2019
@@ -17,6 +18,10 @@ Descrição: Arquivo de cabeçaho reponsável pela definição de constantes, va
 #define QTD_PORTAS 2				//define a qtd de portas e consequentemente de camadas
 #define PAREDE 500				//define os valores para as paredes
 #define VALOR_PORTA 1				//define o valor a ser atribuído para a célula de uma porta
+
+//constantes próprias do modelo estocástico
+#define DIST_ELIT 9.5		//valor máximo das células onde a movimentação estocástica começa a ocorrer
+#define QTD_ELIT 3 		//quantidade de células da vizinhança de um pedestre que farão parte do processo estocástico
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - Variáveis e Vetores Globais - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
