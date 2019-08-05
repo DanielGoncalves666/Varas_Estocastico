@@ -16,9 +16,9 @@ Descrição: arquivo onde estão implementadas as funções de alocação e dos 
 //uma alternativa seria ir diminuindo a probabilidade gradativamente : 40 20 15 10 5, em vez de ter duas celulas com a msm
 //alem disso pode ser necessario fazer um sorteio na ordem de celulas com valores iguais antes
 
-static int probab5[] = { 40, 20, 20, 10, 10 };
-static int probab4[] = { 45, 22, 22, 11 };
-static int probab3[] = { 50, 25, 25};
+static int probab5[] = { 70, 10, 10, 5, 5 };
+static int probab4[] = { 75, 10, 10, 5 };
+static int probab3[] = { 80, 10, 10};
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
