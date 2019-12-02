@@ -2,8 +2,6 @@
 Nome do Arquivo: movimentar.c
 Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
-Data de criação: 2019
-Última modificação: 22/06/2019
 
 Descrição: arquivo onde estão implementadas as funções de alocação e dos mecanismos de movimentação dos pedestres 
 
@@ -18,7 +16,7 @@ Descrição: arquivo onde estão implementadas as funções de alocação e dos 
 
 static int probab5[] = { 70, 10, 10, 5, 5 };
 static int probab4[] = { 75, 10, 10, 5 };
-static int probab3[] = { 80, 10, 10};
+static int probab3[] = { 100, 0, 0};
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 

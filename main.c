@@ -2,8 +2,6 @@
 Nome do Arquivo: main.c
 Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
-Data de Criação: 2018
-Última Modificação: 22/06/2019
 
 Descrição: Esse módulo é o módulo principal do programa, responsável por chamar todas as funções necessárias para alocação de matrizes,
 distribuição do campo de piso, distrbuição dos pedestres, movimentação e realização de testes em massa.
@@ -30,11 +28,13 @@ int main(){
 			inserir_port();//função para inserir as portas em sua respectiva camada da matriz campo_piso
 			distribuir_piso();//função para distribuir os valores para cada celula do campo de piso, em cada camada
 			piso_final();//une todas as camadas do campo_piso
+			maiorCampoPiso();//função que determina o maior campo de piso
 //- - - - - - - - - - - - - - - - - - - - - - - - - Movimentação - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - - //	
 			inicializar_mat_int(&sala,0,0);//função para inicializar a sala com zeros 
 			pedestre_alocar();//função para distribuir os pedestres na sala
 			//imprimir_sala(&sala);printf("\n\n");
 			//imprimir_piso(&piso);printf("\n\n");
+			imprimirOctave();//função responsável por imprimir a sala e os comandos necessários para gerar uma imagem no ocatave.
 			do{
 				basic_moviment();//função para a movimentação dos pedestres
 				movimentar_em_X();//função responsável por impedir a movimentação em X
@@ -48,7 +48,7 @@ int main(){
 			}while(cont() > 0);//rodará enquanto a qtd de pedestres for maior que 0
 			
 			semente++;//incrementa a variavel usado para gerar os numeros pseudo-aleatorios
-			printf("%d\n",passos);//imprime a quantidade de passos necessários para todos os pedestres saírem da sala
+			//printf("%d\n",passos);//imprime a quantidade de passos necessários para todos os pedestres saírem da sala
 		}
 		desaloca();//desaloca as matrizes
 	}
