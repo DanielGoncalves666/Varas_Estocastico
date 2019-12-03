@@ -2,8 +2,6 @@
 Nome do Arquivo: imprimir.c
 Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
-Data de criação: 2019
-Última modificação: 2019
 
 Descrição: arquivo onde estão implementadas as funções de saída e entrada de dados
 */
@@ -54,4 +52,22 @@ void imprimir_sala_pedestres(mat_int *M, mat_float *N){//função para imprimir 
 		}
 		printf("\n\n\n");
 	}
+}
+
+void imprimirOctave(){//função responsável por imprimir a sala e os comandos necessários para gerar uma imagem no ocatave.
+	printf("M = [");
+	for(int a=0; a<lin; a++){
+		printf("[ ");
+		for(int b=0; b<col; b++){//percorre a sala
+			if(piso.mat[a][b] == PAREDE)
+				printf("2 ");//se caso a posição for uma parede
+			else if(sala.mat[a][b] == 0 || sala.mat[a][b] == 1)
+				printf("0 ");//caso for uma célula vazia
+			else if(sala.mat[a][b] > 1)
+				printf("1 ");//caso for um pedestre
+		}
+		printf("]\n");
+	}
+	printf("];\n");
+	printf("imagesc(M); colormap(map);\n\n\n");
 }

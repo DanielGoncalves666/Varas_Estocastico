@@ -2,8 +2,6 @@
 Nome do Arquivo: main.c
 Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
-Data de Criação: 2018
-Última Modificação: 22/06/2019
 
 Descrição: Esse módulo é o módulo principal do programa, responsável por chamar todas as funções necessárias para alocação de matrizes,
 distribuição do campo de piso, distrbuição dos pedestres, movimentação e realização de testes em massa.

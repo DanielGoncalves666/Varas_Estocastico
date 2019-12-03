@@ -2,8 +2,6 @@
 Nome do Arquivo: prototipos.h
 Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
-Data de Criação: 2019
-Última Modificação: 2019
 
 Descrição: Arquivo de cabeçaho reponsável pela definição de constantes, variáveis, estruturas e funções globais. Todas com escopo de programa.
 */
@@ -20,8 +18,8 @@ Descrição: Arquivo de cabeçaho reponsável pela definição de constantes, va
 #define VALOR_PORTA 1				//define o valor a ser atribuído para a célula de uma porta
 
 //constantes próprias do modelo estocástico
-#define DIST_ELIT 9.5		//valor máximo das células onde a movimentação estocástica começa a ocorrer
 #define QTD_ELIT 3 		//quantidade de células da vizinhança de um pedestre que farão parte do processo estocástico
+float DIST_ELIT;		//valor máximo das células onde a movimentação estocástica começa a ocorrer
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - Variáveis e Vetores Globais - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
@@ -62,6 +60,7 @@ extern void ler_inicio();	//função para ler as entradas necessárias (lin, col
 extern void imprimir_piso(mat_float *M);//função para imprimir uma camada de campo de piso
 extern void imprimir_sala(mat_int *M);//função para imprimir uma matriz de inteiros, mais especificamente a nossa sala
 extern void imprimir_sala_pedestres(mat_int *M, mat_float *N);//função para imprimir a sala com os pedestres de uma maneira visualmente amiga
+extern void imprimirOctave();//função responsável por imprimir a sala e os comandos necessários para gerar uma imagem no ocatave.
 
 //piso.c
 extern void inicializar_campo_piso();//função para inicializar a matriz campo_piso
@@ -69,6 +68,7 @@ extern void inicializar_mat_int(mat_int *M, int valor, int aux);//função para 
 extern void inserir_port();//função para inserir as portas em sua respectiva camada da matriz campo_piso
 extern void distribuir_piso();//função que reune as duas funções de atribuição de valores ao piso
 extern void piso_final();//junta todos os valores em um piso final, sendo que os valores menores tem a prioridade
+extern void maiorCampoPiso();//função que determina o maior campo de piso
 
 //movimentar.c
 extern void pedestre_alocar();//função para alocar os pedestres na sala

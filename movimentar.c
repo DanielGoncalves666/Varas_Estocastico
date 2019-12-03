@@ -2,8 +2,6 @@
 Nome do Arquivo: movimentar.c
 Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
-Data de criação: 2019
-Última modificação: 22/06/2019
 
 Descrição: arquivo onde estão implementadas as funções de alocação e dos mecanismos de movimentação dos pedestres 
 

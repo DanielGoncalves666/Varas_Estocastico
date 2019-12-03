@@ -2,8 +2,6 @@
 Nome do Arquivo: piso.c
 Projeto: Varas Estocástico
 Programador: Daniel Gonçalves
-Data de criação: 2019
-Última modificação: 2019
 
 Descrição: arquivo onde estão implementadas as funções de destribuição do campo de piso.
 */
@@ -172,4 +170,19 @@ void piso_final(){//junta todos os valores em um piso final, sendo que os valore
 		}
 	}
 
+}
+
+
+void maiorCampoPiso(){//função que determina o maior campo de piso
+	float maior = 0.0;//setamos a variável com o menor valor possível
+	
+	for(int a=1; a<lin-1; a++){
+		for(int b=1; b<col-1; b++){
+			if(piso.mat[a][b] == PAREDE)
+				continue;//caso a simulação contar com obstáculos
+			if(piso.mat[a][b] > maior)
+				maior = piso.mat[a][b];//caso a posição for maior que o valor anterior, pe realizada a substituição
+		}
+	}
+	DIST_ELIT = maior;
 }
