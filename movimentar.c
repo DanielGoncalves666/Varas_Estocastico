@@ -16,7 +16,7 @@ Descrição: arquivo onde estão implementadas as funções de alocação e dos 
 
 static int probab5[] = { 70, 10, 10, 5, 5 };
 static int probab4[] = { 75, 10, 10, 5 };
-static int probab3[] = { 80, 10, 10};
+static int probab3[] = { 60, 20, 20};
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
@@ -98,7 +98,9 @@ void basic_moviment(){//função para realizar o movimento basico dos pedestres
 
 		int chosen;//variével que indicará para qual das células o pedestre irá se mover
 
-		if(piso.mat[a][b] >= DIST_ELIT)
+		if(celulas[0][0] == (float) VALOR_PORTA)//se caso o valor do campo de piso da menor célula for o valor de uma porta
+			chosen = 0;//o pedestre irá se mover diretamente para lá
+		else if(piso.mat[a][b] >= DIST_ELIT)
 			chosen = comparation(celulas,valid);//retorna para qual célula o pedestre irá se mover se estiver na parte determinística da sala
 		else
 			chosen = estocastico(valid);//retorna para qual célula o pedestre irá se mover se estiver na parte estocastica da sala
@@ -218,7 +220,7 @@ void storage_cell(float **vet, int a, int b){//função responsavel por armazena
 	}
 }
 
-void organiza_vetor(float **vet,int tamanho){//função que organizar em ordem crescente um vetor com tamanho 'tamanho'
+void organiza_vetor(float **vet,int tamanho){//função que organiza em ordem crescente um vetor com tamanho 'tamanho'
 
 	//para organizar esse vetor em ordem crescente, verificações serão feitas se comparando determinada posição com sua posterior, devido a esse fato, a ultima não sofrera o processo, pois caso contrario uma falha de segmentação acontecerá
 	int fim;
