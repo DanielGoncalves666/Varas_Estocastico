@@ -19,7 +19,7 @@ int main(){
 		alocar_tudo();	//função para alocar todas as matrizes
 			
 		semente = 0;	//inicializa a variavel usada para gerar os numeros pseudo-aleatorios
-		for(int simu=0; simu<100; simu++){	//simu define a qtd de simulações a serem feitas, que por padrão é 100
+		for(int simu=0; simu<1; simu++){	//simu define a qtd de simulações a serem feitas, que por padrão é 100
 //- - - - - - - - - - - - - - - - - - - - - - - - - Campo de Piso - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -//	
 			int passos = 0;//variável que indica a qtd de passos necessários para todos os pedestres saírem da sala
 			
@@ -34,7 +34,6 @@ int main(){
 			pedestre_alocar();//função para distribuir os pedestres na sala
 			//imprimir_sala(&sala);printf("\n\n");
 			//imprimir_piso(&piso);printf("\n\n");
-			imprimirOctave();//função responsável por imprimir a sala e os comandos necessários para gerar uma imagem no ocatave.
 			do{
 				basic_moviment();//função para a movimentação dos pedestres
 				movimentar_em_X();//função responsável por impedir a movimentação em X
@@ -45,6 +44,7 @@ int main(){
 				ped_sala_loc();//função para alocar novamente os pedestres na sala formatada
 				passos++;//incrementa a variável passos ao fim de uma rodada
 				//imprimir_sala_pedestres(&sala,&piso);printf("\n\n");getchar();
+				imprimirOctave();//função responsável por imprimir a sala e os comandos necessários para gerar uma imagem no ocatave.
 			}while(cont() > 0);//rodará enquanto a qtd de pedestres for maior que 0
 			
 			semente++;//incrementa a variavel usado para gerar os numeros pseudo-aleatorios

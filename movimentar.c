@@ -16,7 +16,7 @@ Descrição: arquivo onde estão implementadas as funções de alocação e dos 
 
 static int probab5[] = { 70, 10, 10, 5, 5 };
 static int probab4[] = { 75, 10, 10, 5 };
-static int probab3[] = { 100, 0, 0};
+static int probab3[] = { 40, 30, 30};
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
