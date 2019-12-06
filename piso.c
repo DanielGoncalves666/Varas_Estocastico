@@ -172,7 +172,7 @@ void piso_final(){//junta todos os valores em um piso final, sendo que os valore
 
 }
 
-
+/*
 void maiorCampoPiso(){//função que determina o maior campo de piso
 	float maior = 0.0;//setamos a variável com o menor valor possível
 	
@@ -186,3 +186,4 @@ void maiorCampoPiso(){//função que determina o maior campo de piso
 	}
 	DIST_ELIT = maior;
 }
+*/

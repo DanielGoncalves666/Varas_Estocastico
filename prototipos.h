@@ -19,7 +19,8 @@ Descrição: Arquivo de cabeçaho reponsável pela definição de constantes, va
 
 //constantes próprias do modelo estocástico
 #define QTD_ELIT 3 		//quantidade de células da vizinhança de um pedestre que farão parte do processo estocástico
-float DIST_ELIT;		//valor máximo das células onde a movimentação estocástica começa a ocorrer
+#define DIST_ELIT 0.0		//valor máximo das células onde a movimentação estocástica começa a ocorrer
+char caracter;		//variável onde será armazenada o caractere que será usado para imprimir a matriz do octave
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - Variáveis e Vetores Globais - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
@@ -61,6 +62,7 @@ extern void imprimir_piso(mat_float *M);//função para imprimir uma camada de c
 extern void imprimir_sala(mat_int *M);//função para imprimir uma matriz de inteiros, mais especificamente a nossa sala
 extern void imprimir_sala_pedestres(mat_int *M, mat_float *N);//função para imprimir a sala com os pedestres de uma maneira visualmente amiga
 extern void imprimirOctave();//função responsável por imprimir a sala e os comandos necessários para gerar uma imagem no ocatave.
+extern void imprimirComandos();//função responsável por imprimir os camandos que gerarão as imagens no ocatave
 
 //piso.c
 extern void inicializar_campo_piso();//função para inicializar a matriz campo_piso

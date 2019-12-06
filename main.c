@@ -22,6 +22,7 @@ int main(){
 		for(int simu=0; simu<100; simu++){	//simu define a qtd de simulações a serem feitas, que por padrão é 100
 //- - - - - - - - - - - - - - - - - - - - - - - - - Campo de Piso - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -//	
 			int passos = 0;//variável que indica a qtd de passos necessários para todos os pedestres saírem da sala
+			caracter = 65;//definimos como caracter inicial a letra A, decimal na ascii
 			
 			srand(semente);//dá semente como memória para a função rand()
 			inicializar_campo_piso();//função para inicializar a matriz campo_piso
@@ -42,8 +43,10 @@ int main(){
 				inicializar_mat_int(&sala,0,0);//reinicializa a sala
 				ped_sala_loc();//função para alocar novamente os pedestres na sala formatada
 				passos++;//incrementa a variável passos ao fim de uma rodada
+				//imprimirOctave();
 				//imprimir_sala_pedestres(&sala,&piso);printf("\n\n");getchar();
 			}while(cont() > 0);//rodará enquanto a qtd de pedestres for maior que 0
+			//imprimirComandos();
 			
 			semente++;//incrementa a variavel usado para gerar os numeros pseudo-aleatorios
 			printf("%d\n",passos);//imprime a quantidade de passos necessários para todos os pedestres saírem da sala

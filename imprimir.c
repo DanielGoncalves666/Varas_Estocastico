@@ -55,7 +55,12 @@ void imprimir_sala_pedestres(mat_int *M, mat_float *N){//função para imprimir 
 }
 
 void imprimirOctave(){//função responsável por imprimir a sala e os comandos necessários para gerar uma imagem no ocatave.
-	printf("M = [");
+	
+	if(caracter >=91 && caracter <=96)//verifica se caracter esta nos símbolos não alfabéticos entre maiúsculas e minúsculas
+		printf("%c = [",(char) (caracter+6));//somamos 6 unidades para retirarmos a variável de dentro dessa faixa
+	else
+		printf("%c = [",(char) caracter);
+		
 	for(int a=0; a<lin; a++){
 		printf("[ ");
 		for(int b=0; b<col; b++){//percorre a sala
@@ -68,6 +73,15 @@ void imprimirOctave(){//função responsável por imprimir a sala e os comandos 
 		}
 		printf("]\n");
 	}
-	printf("];\n");
-	printf("imagesc(M); colormap(map);\n\n\n");
+	printf("];\n\n");
+	caracter++;
+}
+
+void imprimirComandos(){//função responsável por imprimir os camandos que gerarão as imagens no ocatave
+	printf("\n\n");
+	for(int a=65; a<=caracter; a++){
+		if(a == 91)//pula símbolos não alfabéticos entre maiúsculas e minúsculas
+			a = 97;
+		printf("imagesc(%c); colormap(map);\n", (char) a);
+	}
 }
