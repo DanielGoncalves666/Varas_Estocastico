@@ -11,15 +11,15 @@ Descrição: Arquivo de cabeçaho reponsável pela definição de constantes, va
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - Constantes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-#define QTD_TESTES 92				//define a qtd de testes que serão realizados
+#define QTD_TESTES 1				//define a qtd de testes que serão realizados
 #define PEDESTRES 30				//define a qtd de pedestres que serão distribuídos
-#define QTD_PORTAS 2				//define a qtd de portas e consequentemente de camadas
+#define QTD_PORTAS 1				//define a qtd de portas e consequentemente de camadas
 #define PAREDE 500				//define os valores para as paredes
 #define VALOR_PORTA 1				//define o valor a ser atribuído para a célula de uma porta
 
 //constantes próprias do modelo estocástico
 #define QTD_ELIT 3 		//quantidade de células da vizinhança de um pedestre que farão parte do processo estocástico
-#define DIST_ELIT 0.0		//valor máximo das células onde a movimentação estocástica começa a ocorrer
+#define DIST_ELIT 25.0		//valor máximo das células onde a movimentação estocástica começa a ocorrer
 char caracter;		//variável onde será armazenada o caractere que será usado para imprimir a matriz do octave
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - Variáveis e Vetores Globais - - - - - - - - - - - - - - - - - - - - - - - - - - - //
