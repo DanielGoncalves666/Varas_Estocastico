@@ -49,9 +49,10 @@ int main(){
 			//imprimirComandos();
 			
 			semente++;//incrementa a variavel usado para gerar os numeros pseudo-aleatorios
-			printf("%d\n",passos);//imprime a quantidade de passos necessários para todos os pedestres saírem da sala
+			printf("%d ",passos);//imprime a quantidade de passos necessários para todos os pedestres saírem da sala
 		}
 		desaloca();//desaloca as matrizes
+		printf("\t\t%d %d\n",local_port[0],local_port[1]);
 	}
 	return 0;
 }
