@@ -14,7 +14,6 @@ static float regra[3][3]={{1.5,1.0,1.5},
 			  {1.0,0.0,1.0},
 			  {1.5,1.0,1.5}};
 
-
 static void inicializar_mat_float(mat_float *M, int valor, int aux);//função para inicializar uma matriz de floats
 static void vizin_port(mat_float *M);//função para atribuir valor as celulas vizinhas das portas
 static void campo_geral(mat_float *M);//preenche o restante do campo de piso
@@ -110,15 +109,24 @@ void vizin_port(mat_float *M){//função para atribuir valor as celulas vizinhas
 }
 
 void campo_geral(mat_float *M){//preenche o restante do campo de piso
-	for(int stop=0; stop<20;){//assim que todas as celulas tiverem sido preenchidas, stop começara a ser imcrementada
+	int qtd=0;//variável usada para caso ocorra de uma célula não ser preenchida por causa dos focos de incêndio, impedindo que o programa trave	//fogo
+	
+	for(int stop=0; stop<20;){//assim que todas as celulas tiverem sido preenchidas, stop começara a ser incrementada
 		for(int a=0; a<lin; a++){
 			for(int b=0; b<col; b++){//percorre-se a matriz procurando por valores diferentes de PAREDE e maiores que 1
-				if((*M).mat[a][b]>1.0 && (*M).mat[a][b]!=PAREDE){
+				if(fogo.mat[a][b] == VALOR_FOGO)											//fogo
+					M->mat[a][b] = PAREDE;//caso a célula esteja ocupada por um foco de incêndio atribuímos o valor de parede a ela no campo de piso
+				else if((*M).mat[a][b]>1.0 && (*M).mat[a][b]!=PAREDE){
 					float base = (*M).mat[a][b];//atribui o valor da celula encontrada a variavel base
 					for(int c=-1; c<2; c++){
-						for(int d=-1; d<2; d++){//percorre-se a vizinhança da celula em questao
+						for(int d=-1; d<2; d++){//percorre-se a vizinhança da celula em questao						
 							if((*M).mat[a+c][b+d]==PAREDE)
 								continue;//se caso uma celula da vizinhança for parede, ignora
+							if(fogo.mat[a][b] == VALOR_FOGO){								//fogo
+								M->mat[a][b] = PAREDE;//caso a célula esteja ocupada por um foco de incêndio atribuímos o valor de parede a ela no campo de piso	
+								continue;
+							}
+							
 							if((*M).mat[a+c][b+d]>1.0){//se caso a celula ja tiver um valor atribuido e n for uma porta
 								if(regra[c+1][d+1]+base < (*M).mat[a+c][b+d]){
 									//caso a soma do valor da celula base com o respectivo valor de regra for menor que o valor armazenado na posição em questao, substituimos o valor
@@ -135,16 +143,30 @@ void campo_geral(mat_float *M){//preenche o restante do campo de piso
 				}
 			}
 		}
+		
+
 		int zero=0;//variavel para contar a presença de celulas vazias
 		for(int e=0; e<lin; e++){
 			for(int f=0; f<col; f++){//percorre a matriz
-				if((*M).mat[e][f] == 0.0)
-					zero++;//sempre que se encontra uma celula vazia, é incrementada
+				if((*M).mat[e][f] == 0.0){
+					if(contarVizin(M,0.0,e,f) == 8 || contarVizin(M,PAREDE,e,f) == 8 || contarVizin(M,0.0,e,f) + contarVizin(M,PAREDE,e,f) == 8 ){															//fogo
+						//caso a célula estiver cercada por uma vizinhança vazia
+						//caso a célula estiver cercada por uma vizinhança vazia e com focos
+						//caso a célula estiver totalmente cercada por focos
+						continue;//caso a célula esteja totalmente cercada							//fogo
+					}else
+						zero++;//sempre que se encontra uma celula vazia, é incrementada
+				}
 			}	
 		}
-		if(zero==0){//caso n tiver nenhuma celula vazia começa-se a incrementar a variavel stop
+					
+		if(zero == 0){//caso n tiver nenhuma celula vazia começa-se a incrementar a variavel stop
 			stop++;
 		}
+		qtd++;																	//fogo
+		
+		if(qtd == 100)
+			break;//caso o campo de piso tiver sido percorrido cem vezes e ainda restarem células vazias, interrompemos o preenchimento	//fogo
 	}
 }
 
@@ -184,4 +206,28 @@ void maiorCampoPiso(){//função que determina o maior campo de piso
 		}
 	}
 	DIST_ELIT = maior;
+}
+
+int contarVizin(mat_float *M, float num, int a, int b){//função que conta a quantidade de células na vizinhança com um determinado valor em uma matriz float
+	int contagem=0;
+	
+	for(int c=-1; c<2; c++){
+		for(int d=-1; d<2; d++){//percorre a vizinhança
+			if(a+c == a && b+d == b)
+				continue;//caso for a célula cuja vizinhança está sendo verificada
+			if(M->mat[a+c][b+d] == num)//se existir uma célula com o valor em questão
+				contagem++;//incrementamos a variável de contagem
+		}
+	}
+	return contagem;
+}
+
+void copiarPiso(mat_float *M, mat_float *N){//função que copia o conteudo de uma matriz de floats em outra
+	//M é a matriz que será copiada
+	
+	for(int a=0; a<lin; a++){
+		for(int b=0; b<col; b++){//percorre a matriz
+			N->mat[a][b] = M->mat[a][b];
+		}
+	}
 }

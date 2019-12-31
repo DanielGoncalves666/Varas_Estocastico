@@ -21,8 +21,8 @@ static int probab3[] = { 60, 20, 20};
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
 static void verifica_erro(int a, int b, int ped);//função que verifica se algum pedestre está em uma posição inválida
-static int valid_cell(int a, int b);//função responsavel por contar a qtd de celulas validas para movimentação
-static void storage_cell(float **vet, int a, int b);//função responsavel por armazenar os valores, as linhas e colunas da vizinhança no vetor
+static int valid_cell(int a, int b, int qtd_fogo, int qtd_vazio);//função responsavel por contar a qtd de celulas validas para movimentação			//fogo
+static void storage_cell(float **vet, int a, int b, int qtd_fogo, int qtd_vazio);//função responsavel por armazenar os valores, as linhas e colunas da vizinhança no vetor																				//fogo
 static void organiza_vetor(float **vet,int tamanho);//função que organizar em ordem crescente um vetor com tamanho 'tamanho'
 static void troca(float *i, float *h);//função responsavel por trocar os valores entre duas variaveis ou posições de um vetor
 static int comparation(float **vet, int tamanho);//função para determinar a menor celula da vizinhança de um pedestre
@@ -82,7 +82,12 @@ void basic_moviment(){//função para realizar o movimento basico dos pedestres
 
 		verifica_erro(a,b,ped);//função que verifica se algum pedestre está em uma posição inválida
 
-		int valid = valid_cell(a,b);//valid armazena a qtd de celulas validas, que sera o tamanho de um vetor
+		int qtd_fogo = contarVizin(&piso,PAREDE,a,b);//função que conta a quantidade de células na vizinhança com um determinado valor		//fogo
+							//o valor passado é o de parede pois está simulando a existência de focos
+		int qtd_vazio = contarVizin(&piso,0.0,a,b);//vai contar a quantidade de células cujo campo de piso esteja vazio				//fogo	
+						
+		int valid = valid_cell(a,b,qtd_fogo,qtd_vazio);//valid armazena a qtd de celulas validas, que sera o tamanho de um vetor		//fogo
+		
 		if(valid == 0){//caso o pedestre estiver encurralado e não puder se mover para local algum
 			Pedestre[ped].mover = 0;//determinamos que ele é incapaz de se mover
 			continue;//e passamos para o próximo pedestre
@@ -93,7 +98,7 @@ void basic_moviment(){//função para realizar o movimento basico dos pedestres
 		for(int i=0;i<valid;i++)
 			celulas[i] = malloc(3*sizeof(float));//para cada posição do bloco alocamos um novo bloco de 3 posições
 
-		storage_cell(celulas,a,b);//função responsavel por fazer esse armazenamento
+		storage_cell(celulas,a,b,qtd_fogo,qtd_vazio);//função responsavel por fazer esse armazenamento						//fogo
 		organiza_vetor(celulas,valid);//organizar os valores da vizinhamça em ordem crescente
 
 		int chosen;//variével que indicará para qual das células o pedestre irá se mover
@@ -189,34 +194,65 @@ void verifica_erro(int a, int b, int ped){//função que verifica se algum pedes
 	}
 }
 
-int valid_cell(int a, int b){//função responsavel por contar a qtd de celulas validas para movimentação
-	int valid = 0;
-
-	for(int c=-1; c<2; c++){
-		for(int d=-1; d<2; d++){//juntos percorrem a vizinhança do pedestre	
-			if(sala.mat[a+c][b+d] >= 2 || piso.mat[a+c][b+d] == PAREDE)
-				continue;//caso a posição ja estiver ocupada, ou for uma parede, passamos pra frente
-			else
-				valid++; 
+int valid_cell(int a, int b, int qtd_fogo, int qtd_vazio){//função responsavel por contar a qtd de celulas validas para movimentação			//fogo
+	int valid = 0;	
+	
+	if(qtd_fogo + qtd_vazio >= 6){//caso existir na vizinhança 6 ou mais células vazias ou com focos	
+		for(int c=-1; c<2; c++){
+			for(int d=-1; d<2; d++){//juntos percorrem a vizinhança do pedestre	
+				if(sala.mat[a+c][b+d] >= 2 || piso_original.mat[a+c][b+d] == PAREDE){							//fogo
+					continue;//caso a posição ja estiver ocupada, ou for uma parede, passamos pra frente
+				}else
+					valid++;
+			}
+		}
+	}else{//caso existir 5 ou menos céulas vazias ou com fogo na vizinhança										//fogo
+		for(int c=-1; c<2; c++){
+			for(int d=-1; d<2; d++){//juntos percorrem a vizinhança do pedestre	
+				if(sala.mat[a+c][b+d] >= 2 || piso.mat[a+c][b+d] == PAREDE || piso.mat[a+c][b+d] == 0.0)				//fogo
+					continue;//caso a posição ja estiver ocupada, ou for uma parede, ou se estiver vazia, passamos pra frente
+				else if(fogo.mat[a+c][b+d] == VALOR_FOGO)										//fogo
+					continue;//caso houver um foco de incêndio na célula 								//fogo
+				else
+					valid++; 
+			}
 		}
 	}
+		
 	return valid;
 }
 
-void storage_cell(float **vet, int a, int b){//função responsavel por armazenar os valores, as linhas e colunas da vizinhança no vetor
+void storage_cell(float **vet, int a, int b, int qtd_fogo, int qtd_vazio){//função responsavel por armazenar os valores, as linhas e colunas da vizinhança no vetor																	//fogo
 	int i = 0;//a variavel i é responsavel por percorrer a matriz de armazenamento, linha por linha
 
-	for(int c=-1; c<2; c++){
-		for(int d=-1; d<2; d++){//juntos percorrem a vizinhança do pedestre	
-	 		if(sala.mat[a+c][b+d] >= 2 || piso.mat[a+c][b+d] == PAREDE)
-				continue;//caso a posição ja estiver ocupada, ou for uma parede, passamos pra frente
-			else{
-				vet[i][0] = piso.mat[a+c][b+d];//armazena o valor da celula
-				vet[i][1] = a+c; //armazena a linha da celula
-				vet[i][2] = b+d; //armazena a coluna da celula
-				i++;//essa variavel serve para percorrer o vetor
-			}			
-		}
+	if(qtd_fogo + qtd_vazio >= 6){//caso existir na vizinhança 6 ou mais células vazias ou com focos	
+		for(int c=-1; c<2; c++){
+			for(int d=-1; d<2; d++){//juntos percorrem a vizinhança do pedestre	
+		 		if(sala.mat[a+c][b+d] >= 2 || piso_original.mat[a+c][b+d] == PAREDE)							//fogo
+					continue;//caso a posição ja estiver ocupada, ou for uma parede, passamos pra frente
+				else{
+					vet[i][0] = piso_original.mat[a+c][b+d];//armazena o valor da celula						//fogo
+					vet[i][1] = a+c; //armazena a linha da celula
+					vet[i][2] = b+d; //armazena a coluna da celula
+					i++;//essa variavel serve para percorrer o vetor
+				}			
+			}
+		}	
+	}else{//caso existir 5 ou menos céulas vazias ou com fogo na vizinhança										//fogo
+		for(int c=-1; c<2; c++){
+			for(int d=-1; d<2; d++){//juntos percorrem a vizinhança do pedestre	
+		 		if(sala.mat[a+c][b+d] >= 2 || piso.mat[a+c][b+d] == PAREDE || piso.mat[a+c][b+d] == 0.0)				//fogo
+					continue;//caso a posição ja estiver ocupada, ou for uma parede, ou se estiver vazia, passamos pra frente
+				else if(fogo.mat[a+c][b+d] == VALOR_FOGO)										//fogo
+					continue;//caso houver um foco de incêndio na célula 								//fogo
+				else{
+					vet[i][0] = piso.mat[a+c][b+d];//armazena o valor da celula
+					vet[i][1] = a+c; //armazena a linha da celula
+					vet[i][2] = b+d; //armazena a coluna da celula
+					i++;//essa variavel serve para percorrer o vetor
+				}			
+			}
+		}	
 	}
 }
 

@@ -43,6 +43,8 @@ void imprimir_sala_pedestres(mat_int *M, mat_float *N){//função para imprimir 
 		for(int b=0; b<col; b++){
 			if((*N).mat[a][b] == 1.0)
 				printf(" \t");//caso a célula for uma porta, imprime um espaço
+			else if(fogo.mat[a][b] == VALOR_FOGO && M->mat[a][b] == 0)									//fogo
+				printf("%d\t",VALOR_FOGO);//caso a célula estiver pegando fogo e com nenhum pedestre, imprime o valor de fogo		//fogo
 			else if(a == 0 || a == lin-1 || b == 0 || b == col-1)
 				printf("%d\t",PAREDE);//caso for uma das células da borda, imprime o valor de PAREDE
 			else if((*M).mat[a][b] == 0)
@@ -64,7 +66,9 @@ void imprimirOctave(){//função responsável por imprimir a sala e os comandos 
 	for(int a=0; a<lin; a++){
 		printf("[ ");
 		for(int b=0; b<col; b++){//percorre a sala
-			if(piso.mat[a][b] == PAREDE)
+			if(fogo.mat[a][b] == VALOR_FOGO)												//fogo
+				printf("4 ");//caso a posição for um foco de incêndio									//fogo
+			else if(piso.mat[a][b] == PAREDE)
 				printf("2 ");//se caso a posição for uma parede
 			else if(sala.mat[a][b] == 0 || sala.mat[a][b] == 1)
 				printf("0 ");//caso for uma célula vazia

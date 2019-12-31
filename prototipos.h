@@ -17,6 +17,13 @@ Descrição: Arquivo de cabeçaho reponsável pela definição de constantes, va
 #define PAREDE 500				//define os valores para as paredes
 #define VALOR_PORTA 1				//define o valor a ser atribuído para a célula de uma porta
 
+// - - - - - - FOGO - - - - - - //
+#define ZONA_NEUTRA 10	 			//limite da zona onde nenhum foco de incêndio pode começar						//fogo
+#define ZONA_QUENTE 16				//limite da zona ideal para focos de incêndio começarem							//fogo
+#define QTD_FOCOS 4				//define a quantidade de focos de incêndio								//fogo
+#define VALOR_FOGO 400				//define o valor de uma célula pegando fogo								//fogo
+#define PROBABILIDADE 25			//define a probabilidade de uma célula na vizinhança de um foco pegar fogo (por mil)			//fogo
+
 //constantes próprias do modelo estocástico
 #define QTD_ELIT 3 		//quantidade de células da vizinhança de um pedestre que farão parte do processo estocástico
 float DIST_ELIT;		//valor máximo das células onde a movimentação estocástica começa a ocorrer
@@ -41,13 +48,13 @@ Pessoas Pedestre[PEDESTRES];	//estrutura para a quantidade PEDESTRES de indivíd
 typedef struct{
 	int **mat;
 }mat_int;
-mat_int sala;			//estrutura para a sala, onde os pedestres serao alocados
+mat_int sala, fogo, fogo_aux;			//estrutura para a sala, onde os pedestres serao alocados						//fogo
 
 typedef struct{
 	float **mat;
 }mat_float;
 mat_float campo_piso[QTD_PORTAS];	//estrutura para o campo de piso.
-mat_float piso;				//estrutura para o piso final, obtido a partir das matrizes do campo_piso
+mat_float piso, piso_original;		//estrutura para o piso final, obtido a partir das matrizes do campo_piso					//fogo
 
 typedef struct node{//estrutrura do tipo fila
 	int num;
@@ -71,6 +78,8 @@ extern void inserir_port();//função para inserir as portas em sua respectiva c
 extern void distribuir_piso();//função que reune as duas funções de atribuição de valores ao piso
 extern void piso_final();//junta todos os valores em um piso final, sendo que os valores menores tem a prioridade
 extern void maiorCampoPiso();//função que determina o maior campo de piso
+extern int contarVizin(mat_float *M, float num, int a, int b);//função que conta a quantidade de células na vizinhança com um determinado valor		//fogo
+extern void copiarPiso(mat_float *M, mat_float *N);//função que copia o campo de piso para outra							//fogo
 
 //movimentar.c
 extern void pedestre_alocar();//função para alocar os pedestres na sala
@@ -90,5 +99,8 @@ extern void aloca_float_mat(mat_float *M);//função para alocar uma matriz de r
 extern void alocar_tudo();//função para alocar todas as matrizes
 extern void desaloca();//função para desalocar as matrizes básicas
 
+//fogo.c
+extern void inserir_fogo();//função responsável por inserir os focos de incêndio na sala
+extern void fogo_espalhar();//função responsável por espalhar o fogo pela sala
 
 #endif
