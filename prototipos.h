@@ -19,15 +19,6 @@ Descrição: Arquivo de cabeçaho reponsável pela definição de constantes, va
 
 //constantes próprias do modelo estocástico
 #define QTD_ELIT 3 		//quantidade de células da vizinhança de um pedestre que farão parte do processo estocástico
-float DIST_ELIT;		//valor máximo das células onde a movimentação estocástica começa a ocorrer
-char caracter;		//variável onde será armazenada o caractere que será usado para imprimir a matriz do octave
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - Variáveis e Vetores Globais - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-int lin, col;	//qtd de linhas, qtd de colunas
-int local_port[QTD_PORTAS*2];	//cria-se um vetor que armazena a linha e a coluna, respectivamente, para cada porta
-int semente;	//variavel para armazenar o valor que sera usado pela rand(), para gerar numeros pseudo aleatorios
-//int panico;	//vatiavel par auxiliar na geração de numeros aleatorios na função de panico
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - Estruturas de Dados - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
@@ -36,23 +27,35 @@ typedef struct{				//estrutura de dados padrão para os pedestres
 	int linha_atual, coluna_atual;	//posição atual do pedestre em linha e coluna, respectivamente
 	int linha_mover, coluna_mover;	//posição ao qual o pedestre irá se mover, em linha e coluna, respectivamente
 }Pessoas;
-Pessoas Pedestre[PEDESTRES];	//estrutura para a quantidade PEDESTRES de indivíduos
 
 typedef struct{
 	int **mat;
 }mat_int;
-mat_int sala;			//estrutura para a sala, onde os pedestres serao alocados
 
 typedef struct{
 	float **mat;
 }mat_float;
-mat_float campo_piso[QTD_PORTAS];	//estrutura para o campo de piso.
-mat_float piso;				//estrutura para o piso final, obtido a partir das matrizes do campo_piso
 
 typedef struct node{//estrutrura do tipo fila
 	int num;
 	struct node *prox;
 }node;
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - Variáveis e Vetores Globais - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+extern float DIST_ELIT;		//valor máximo das células onde a movimentação estocástica começa a ocorrer
+extern char caracter;		//variável onde será armazenada o caractere que será usado para imprimir a matriz do octave
+
+
+extern int lin, col;	//qtd de linhas, qtd de colunas
+extern int local_port[QTD_PORTAS*2];	//cria-se um vetor que armazena a linha e a coluna, respectivamente, para cada porta
+extern int semente;	//variavel para armazenar o valor que sera usado pela rand(), para gerar numeros pseudo aleatorios
+//int panico;	//variavel par auxiliar na geração de numeros aleatorios na função de panico
+
+extern Pessoas Pedestre[PEDESTRES];	//estrutura para a quantidade PEDESTRES de indivíduos
+extern mat_int sala;			//estrutura para a sala, onde os pedestres serao alocados
+extern mat_float campo_piso[QTD_PORTAS];	//estrutura para o campo de piso.
+extern mat_float piso;				//estrutura para o piso final, obtido a partir das matrizes do campo_piso
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - Prototipos das Funções - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
@@ -63,6 +66,7 @@ extern void imprimir_sala(mat_int *M);//função para imprimir uma matriz de int
 extern void imprimir_sala_pedestres(mat_int *M, mat_float *N);//função para imprimir a sala com os pedestres de uma maneira visualmente amiga
 extern void imprimirOctave();//função responsável por imprimir a sala e os comandos necessários para gerar uma imagem no ocatave.
 extern void imprimirComandos();//função responsável por imprimir os camandos que gerarão as imagens no ocatave
+extern void imprimirSalaCompacta(mat_int *M, mat_float *N);
 
 //piso.c
 extern void inicializar_campo_piso();//função para inicializar a matriz campo_piso
