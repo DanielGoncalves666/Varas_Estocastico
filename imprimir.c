@@ -11,6 +11,7 @@ Descrição: arquivo onde estão implementadas as funções de saída e entrada 
 #include"prototipos.h"
 
 void ler_inicio(){	//função para ler as entradas necessárias (lin, col, local_portas)
+	printf("\nModelo de entrada:\n\tqtd_linha qtd_colunas\n\tlinha_porta coluna_porta (quantidade de portas definida por constante)\n");	
 	scanf("%d %d",&lin,&col);
 	
 	for(int b=0; b<QTD_PORTAS*2; b+=2){//para armazenar as portas
@@ -89,5 +90,26 @@ void imprimirComandos(){//função responsável por imprimir os camandos que ger
 			caracter+=5;//incremeta a quantiade de símbolos pulados
 		}
 		printf("imagesc(%c); colormap(map);\n", (char) a);
+	}
+}
+
+void imprimirSalaCompacta(mat_int *M, mat_float *N)
+{
+	for(int i = 0; i < lin; i++)
+	{
+		for(int h = 0; h < col; h++)
+		{
+			if(N->mat[i][h] == 1.0)
+				printf("  ");
+			else if(i == 0 || i == lin - 1 || h == 0 || h == col - 1)
+				printf("* ");
+			else if(fogo.mat[i][h] == VALOR_FOGO && M->mat[i][h] == 0)
+				printf("# ");
+			else if(M->mat[i][h] == 0)
+				printf("  ");
+			else
+				printf("P ");
+		}
+		printf("\n");
 	}
 }

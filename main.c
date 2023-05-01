@@ -9,7 +9,21 @@ distribuição do campo de piso, distrbuição dos pedestres, movimentação e r
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<unistd.h>
+#include<unistd.h>
 #include"prototipos.h"
+
+float DIST_ELIT;		//valor máximo das células onde a movimentação estocástica começa a ocorrer
+char caracter;		//variável onde será armazenada o caractere que será usado para imprimir a matriz do octave
+
+int lin, col;	//qtd de linhas, qtd de colunas
+int local_port[QTD_PORTAS*2];	//cria-se um vetor que armazena a linha e a coluna, respectivamente, para cada porta
+int semente;	//variavel para armazenar o valor que sera usado pela rand(), para gerar numeros pseudo aleatorios
+
+Pessoas Pedestre[PEDESTRES];	//estrutura para a quantidade PEDESTRES de indivíduos
+mat_int sala, fogo, fogo_aux; //estrutura para a sala, onde os pedestres serao alocados						//fogo
+mat_float campo_piso[QTD_PORTAS];	//estrutura para o campo de piso.
+mat_float piso, piso_original;		//estrutura para o piso final, obtido a partir das matrizes do campo_piso					//fogo
 
 int main(){
 
@@ -54,6 +68,11 @@ int main(){
 				piso_final();//une todas as camadas do campo_piso									//fogo
 				
 				passos++;//incrementa a variável passos ao fim de uma rodada
+				
+				sleep(1);
+				system("clear");
+				imprimirSalaCompacta(&sala,&piso);
+
 				//imprimirOctave();
 				//imprimir_sala_pedestres(&sala,&piso);printf("\n\n");getchar();
 			}while(cont() > 0);//rodará enquanto a qtd de pedestres for maior que 0
@@ -63,7 +82,7 @@ int main(){
 			printf("%d ",passos);//imprime a quantidade de passos necessários para todos os pedestres saírem da sala
 		}
 		desaloca();//desaloca as matrizes
-		printf("\t\t%d %d\n",local_port[0],local_port[1]);
+		//printf("\t\t%d %d\n",local_port[0],local_port[1]);
 	}
 	return 0;
 }
